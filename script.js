@@ -153,3 +153,67 @@
 //###############################################
 // ЗАПИСНАЯ КНИЖКА
 //###############################################
+//1)После ввода текста в поле текстареа, по нажатию на кнопку очищаем поле.
+//При этом в меню появится ссылка с текстом "Запись №",
+//где в место № будет порядковый номер записи.
+//2)По нажатию на ссылку меню, в текстареа должен появится текст соответствующей записи,
+//который можно поредоктировать и понажатию на кнопку сохранить, обновится.
+//Алгоритм: 1)хранить данные текста будем в массиве, по нажатию на кнопку,
+//текст добавляется в массив при этом  в меню добавляется li для этой записи
+//2)по нажатию на ссылку будем прочитывать содержимое ее атрибута data-key,
+// затем будем получать текст из элемента объекта с таким номером,
+// и затем будем записывать этот текст в текстареа.
+//3)По клику на любую li нужно найти текущую активную и деактивировать ее
+//4)Нажатие на кнопку в режиме просмотра записи, сделать редактирование этой записи,
+//а нажатие на кнопку в режиме создания - создаем новую запись
+
+let menu = document.querySelector('#menu #notes');
+let btnCreate = document.querySelector('#create button');
+let textarea = document.querySelector('textarea');
+let btnSave = document.querySelector('#text button');
+
+let arrText = [];
+let count = 1;
+
+btnSave.addEventListener('click', function() {
+  let mode = this.dataset.mode;// нажав на кнопку записываем в переменную класс data атрибута
+	console.log(mode, btnSave);
+
+	if (mode == 'create') {//если переменная равна строке этого класса
+    let li = document.createElement('li'); // создаем лишки
+    console.log(li, count);
+    li.innerHTML = 'Запись ' + count++;//записываем в них номер счетчика
+    li.dataset.key = count;// записываем в дата атрибут счетчик
+    arrText.push(textarea.value);// пушим в массив текст
+    console.log(li.dataset.key, count);
+
+    li.addEventListener('click', function() {
+      textarea.value = arrText[ li.dataset.key ];// при нажатии на лишку в текстареа записываем через массив номер ключа дата атрибута лишки
+      console.log(textarea.value);
+      btnSave.dataset.mode = 'update';//записываем в дата атрибут кнопки ветку update
+      btnSave.dataset.key  = li.dataset.key;// в дата атрибут ключа кнопки записываем так же и номер ключа дата атрибута лишки
+
+      let liActive = document.querySelector('li.active');
+
+        if (liActive) {
+          liActive.classList.remove('active');
+        }
+        if (!this.classList.contains('active')) {
+          this.classList.add('active');
+        }
+    });
+
+    menu.append(li);
+   
+    //count++;
+    textarea.value = '';
+	}
+	
+	if (mode == 'update') {
+		let key = this.dataset.key;
+		console.log(key);
+    arrText[ key ] = textarea.value;
+    btnSave.dataset.mode = 'create';
+	}
+ 
+});
