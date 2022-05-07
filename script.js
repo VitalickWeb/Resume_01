@@ -174,6 +174,7 @@ let btnSave = document.querySelector('#text button');
 
 let arrText = [];
 let count = 1;
+let dataCount = 0;
 
 btnSave.addEventListener('click', function() {
   let mode = this.dataset.mode;// нажав на кнопку записываем в переменную класс data атрибута
@@ -183,9 +184,9 @@ btnSave.addEventListener('click', function() {
     let li = document.createElement('li'); // создаем лишки
     console.log(li, count);
     li.innerHTML = 'Запись ' + count++;//записываем в них номер счетчика
-    li.dataset.key = count;// записываем в дата атрибут счетчик
+    li.dataset.key = dataCount++;// записываем в дата атрибут счетчик
     arrText.push(textarea.value);// пушим в массив текст
-    console.log(li.dataset.key, count);
+    console.log(arrText, li.dataset.key, count);
 
     li.addEventListener('click', function() {
       textarea.value = arrText[ li.dataset.key ];// при нажатии на лишку в текстареа записываем через массив номер ключа дата атрибута лишки
@@ -204,14 +205,12 @@ btnSave.addEventListener('click', function() {
     });
 
     menu.append(li);
-   
-    //count++;
+
     textarea.value = '';
 	}
 	
 	if (mode == 'update') {
 		let key = this.dataset.key;
-		console.log(key);
     arrText[ key ] = textarea.value;
     btnSave.dataset.mode = 'create';
 	}
