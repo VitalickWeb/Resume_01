@@ -171,10 +171,11 @@ let menu = document.querySelector('#menu #notes');
 let btnCreate = document.querySelector('#create button');
 let textarea = document.querySelector('textarea');
 let btnSave = document.querySelector('#text button');
+let parf = document.querySelector('.new_create')
 
 let arrText = [];
 let count = 1;
-let dataCount = 0;
+let attrCount = 0;
 
 btnSave.addEventListener('click', function() {
   let mode = this.dataset.mode;// нажав на кнопку записываем в переменную класс data атрибута
@@ -184,16 +185,15 @@ btnSave.addEventListener('click', function() {
     let li = document.createElement('li'); // создаем лишки
     console.log(li, count);
     li.innerHTML = 'Запись ' + count++;//записываем в них номер счетчика
-    li.dataset.key = dataCount++;// записываем в дата атрибут счетчик
+    li.dataset.key = attrCount++;// записываем в дата атрибут счетчик
     arrText.push(textarea.value);// пушим в массив текст
-    console.log(arrText, li.dataset.key, count);
+    console.log(arrText, li.dataset.key);
 
     li.addEventListener('click', function() {
       textarea.value = arrText[ li.dataset.key ];// при нажатии на лишку в текстареа записываем через массив номер ключа дата атрибута лишки
-      console.log(textarea.value);
       btnSave.dataset.mode = 'update';//записываем в дата атрибут кнопки ветку update
       btnSave.dataset.key  = li.dataset.key;// в дата атрибут ключа кнопки записываем так же и номер ключа дата атрибута лишки
-
+      console.log(textarea.value, btnSave.dataset.mode, btnSave.dataset.key);
       let liActive = document.querySelector('li.active');
 
         if (liActive) {
@@ -205,16 +205,18 @@ btnSave.addEventListener('click', function() {
     });
 
     menu.append(li);
-
     textarea.value = '';
 	}
 	
 	if (mode == 'update') {
-		let key = this.dataset.key;
-    arrText[ key ] = textarea.value;
-    btnSave.dataset.mode = 'create';
+		let key = this.dataset.key;//после редактирования в ключь записываем номер дата атрибута
+    arrText[ key ] = textarea.value;//из текстареа записываем в массив изменения того номера в котором произощли изменения
+    btnSave.dataset.mode = 'create';//и переходим в режи создания
 	}
- 
+
+  btnCreate.addEventListener('click', function() {
+    parf.innerHTML = btnSave.dataset.mode;
+  });
 });
 
 
