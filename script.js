@@ -184,15 +184,35 @@ btnSave.addEventListener('click', function() {
 	if (mode == 'create') {//если переменная равна строке этого класса
     let li = document.createElement('li'); // создаем лишки
     console.log(li, count);
-    li.innerHTML = 'Запись ' + count++;//записываем в них номер счетчика
-    li.dataset.key = attrCount++;// записываем в дата атрибут счетчик
+
+    let spanRec = document.createElement('span');
+    spanRec.classList.add('open');
+    spanRec.innerHTML = 'Запись ' + count++;//записываем в span номер счетчика
+    spanRec.dataset.key = attrCount++;// записываем в дата атрибут счетчик
+    li.append(spanRec);
+
+    let spanDel = document.createElement('span');
+    spanDel.classList.add('remove');
+    spanDel.innerHTML = 'X';
+    spanDel.addEventListener('click', function() {
+      textarea.value = '';
+
+      if (textarea.value == '') {
+        let resultRemove = document.createElement('span');
+        resultRemove.classList.add('message_o_del');
+        resultRemove.innerHTML = 'record successfully deleted';
+        parf.append(resultRemove);
+      }
+    });
+    li.append(spanDel);
+
     arrText.push(textarea.value);// пушим в массив текст
-    console.log(arrText, li.dataset.key);
+    console.log(arrText, spanRec.dataset.key);
 
     li.addEventListener('click', function() {
-      textarea.value = arrText[ li.dataset.key ];// при нажатии на лишку в текстареа записываем через массив номер ключа дата атрибута лишки
+      textarea.value = arrText[ spanRec.dataset.key ];// при нажатии на лишку в текстареа записываем через массив номер ключа дата атрибута лишки
       btnSave.dataset.mode = 'update';//записываем в дата атрибут кнопки ветку update
-      btnSave.dataset.key  = li.dataset.key;// в дата атрибут ключа кнопки записываем так же и номер ключа дата атрибута лишки
+      btnSave.dataset.key  = spanRec.dataset.key;// в дата атрибут ключа кнопки записываем так же и номер ключа дата атрибута лишки
       console.log(textarea.value, btnSave.dataset.mode, btnSave.dataset.key);
       let liActive = document.querySelector('li.active');
 
